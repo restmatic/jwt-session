@@ -26,6 +26,7 @@ export const SessionMiddleware = CreatePlugin('merge')
           if (req.headers.authorization) {
             return Authentication.authenticate('bearer', {session: false}, function (err, user, info) {
               if (err) {
+                err.errorstatusCode = 401
                 return next(err)
               }
               if (!user) {
