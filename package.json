@@ -1,0 +1,52 @@
+{
+  "name": "@restmatic/jwt-session",
+  "version": "0.0.0",
+  "description": "Provides Authentication to the RestMatic platform.",
+  "main": "index.js",
+  "files": [
+    "index.d.ts",
+    "index.js.map",
+    "Plugins/**/*",
+    "Readme.md",
+    "LICENCE"
+  ],
+  "scripts": {
+    "prepublishOnly": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Pomegranate",
+    "Plugin",
+    "RestMatic",
+    "Passport",
+    "Authentication"
+  ],
+  "author": "Jim Bulkowski <jim.b@paperelectron.com> (http://paperelectron.com)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.12",
+    "@types/lodash": "^4.14.123",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@pomegranate/plugin-tools": "^1.2.4",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express-jwt": "^0.0.42",
+    "@types/jsonwebtoken": "^8.3.2",
+    "bluebird": "^3.5.4",
+    "cookie-parser": "^1.4.4",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/restmatic/jwt-session.git"
+  },
+  "bugs": {
+    "url": "https://github.com/restmatic/jwt-session/issues"
+  },
+  "homepage": "https://github.com/restmatic/jwt-session#readme"
+}
