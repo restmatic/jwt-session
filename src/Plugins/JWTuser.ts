@@ -101,6 +101,8 @@ export const JWTuser = CreatePlugin('anything')
             .catch((err) => {
               PluginLogger.error('Failed to parse redis response correctly.')
               PluginLogger.error(err)
+              err.defaultStatusCode = 401
+              next && next(err)
             })
         }
         U.update = () => {
