@@ -1,6 +1,6 @@
 {
   "name": "@restmatic/jwt-session",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Provides Authentication to the RestMatic platform.",
   "main": "index.js",
   "files": [
