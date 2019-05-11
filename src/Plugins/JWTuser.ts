@@ -82,11 +82,10 @@ export const JWTuser = CreatePlugin('anything')
             })
             .spread(function (source, user) {
               if (source === 'db') {
-                let plainUser = user.get({plain: true});
-                let jsonUser = JSON.stringify(plainUser);
+                let jsonUser = JSON.stringify(user);
                 return Redis.setAsync(keyName, [jsonUser, 'EX', 60])
                   .then((result) => {
-                    return plainUser
+                    return user
                   })
               }
               return user
