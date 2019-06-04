@@ -58,7 +58,6 @@ export const JWTuser = CreatePlugin('anything')
       }
 
       const populateJWTUser = Injector.inject(mw)
-      console.log(populateJWTUser)
 
       return (decodedJwt, next) => {
         let keyName = `${PluginVariables.redisPrefix}:${decodedJwt.uuid}`
