@@ -31,7 +31,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@pomegranate/plugin-tools": "^1.2.4",
+    "@pomegranate/plugin-tools": "^2.0.7",
     "@types/cookie-parser": "^1.4.1",
     "@types/express-jwt": "^0.0.42",
     "@types/jsonwebtoken": "^8.3.2",
