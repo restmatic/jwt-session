@@ -8,6 +8,7 @@
 
 import {CreatePlugin} from "@pomegranate/plugin-tools";
 import {extend, get, isFunction} from 'lodash/fp'
+import {JSONCookie} from "cookie-parser";
 
 //@ts-ignore
 const mutableExtend = extend.convert({immutable: false})
@@ -41,7 +42,8 @@ export const JWTuser = CreatePlugin('anything')
     path: '.'
   }])
   .variables({
-    redisPrefix: 'fake'
+    redisPrefix: 'fake',
+    key_ttl: 60
   })
   .hooks({
     load: async (Injector, PluginLogger, PluginFiles, PluginVariables, Redis, Actions) => {
@@ -59,6 +61,8 @@ export const JWTuser = CreatePlugin('anything')
 
       const populateJWTUser = Injector.inject(mw)
 
+      const commandArr = PluginVariables.key_ttl > 0 ? ['EX', PluginVariables.key_ttl] : []
+      console.log(commandArr)
       return (decodedJwt, next) => {
         let keyName = `${PluginVariables.redisPrefix}:${decodedJwt.uuid}`
         let U = {} as JWTuser
@@ -82,7 +86,8 @@ export const JWTuser = CreatePlugin('anything')
             .spread(function (source, user) {
               if (source === 'db') {
                 let jsonUser = JSON.stringify(user);
-                return Redis.setAsync(keyName, [jsonUser, 'EX', 60])
+                let redisArgs = [jsonUser, ...commandArr]
+                return Redis.setAsync(keyName, redisArgs)
                   .then((result) => {
                     return user
                   })
