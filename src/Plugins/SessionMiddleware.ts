@@ -7,6 +7,7 @@
 import {CreatePlugin} from "@pomegranate/plugin-tools";
 import expressJwt from 'express-jwt';
 import cookies from 'cookie-parser'
+import {JsonWebTokenError} from "jsonwebtoken";
 
 export const SessionMiddleware = CreatePlugin('merge')
   .configuration({
@@ -22,7 +23,7 @@ export const SessionMiddleware = CreatePlugin('merge')
 
       return {
         cookies: cookies(),
-        JWTSession: (req, res, next) => {
+        JWTSession: async (req, res, next) => {
           if (req.headers.authorization) {
             return Authentication.authenticate('bearer', {session: false}, function (err, user, info) {
               if (err) {
@@ -34,22 +35,21 @@ export const SessionMiddleware = CreatePlugin('merge')
               }
               if (user && user.uuid) {
                 return req.user = JWTuser(user, next)
-                // return req.user = {}
               }
-              //req.user = user
-
               return next()
 
             })(req, res, next);
+
           } else if (req.cookies.jwt_token) {
-            return RouteSecurity.decodeJwt(req.cookies.jwt_token, function (err, user) {
-              if (user && user.uuid) {
-                let u = JWTuser(user, next)
-                return req.user = u
+            try {
+              let user = await RouteSecurity.decodeJwt(req.cookies.jwt_token)
+              if(user && user.uuid){
+                req.user = JWTuser(user, next)
               }
-              return next()
-            })
-            //return handleCookieJWT(req, res, next);
+            }
+            catch(err){
+              next()
+            }
           } else {
             return next()
           }
