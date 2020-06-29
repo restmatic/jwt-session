@@ -17,17 +17,36 @@ export const SessionSecurity = CreatePlugin('merge')
     provides: ['@restmatic/Core']
   })
   .variables({
-    jwtSecret: 'changeMe'
+    jwtSecret: 'changeMe',
+    jwtSigningOptions: {},
+    jwtVerifyOptions: {}
   })
   .hooks({
     load: async (Injector, PluginLogger, PluginVariables, PluginFiles, Authentication) => {
       PluginLogger.log('Creating SessionSecurity methods', 1)
       return {
-        encodeJwt: (data) => {
-          return sign(data, PluginVariables.jwtSecret)
+        encodeJwt: (data, overrideOpts?) => {
+          const opts = overrideOpts || PluginVariables.jwtSigningOptions
+          return new Promise((resolve, reject) => {
+            sign(data, PluginVariables.jwtSecret, opts, (err, token) => {
+              if(err){
+                return reject(err)
+              }
+              return resolve(token)
+            })
+          })
         },
-        decodeJwt: (token, cb) => {
-          return verify(token, PluginVariables.jwtSecret, cb)
+        decodeJwt: (token, overrideOpts?) => {
+          const opts = overrideOpts || PluginVariables.jwtVerifyOptions
+          return new Promise((resolve, reject) => {
+            verify(token, PluginVariables.jwtSecret, opts,(err, payload) => {
+              if(err){
+                return reject(err)
+              }
+              return resolve(payload)
+            })
+          })
+
         }
       }
     }
