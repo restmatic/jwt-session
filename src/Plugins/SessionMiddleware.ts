@@ -44,10 +44,12 @@ export const SessionMiddleware = CreatePlugin('merge')
             try {
               let user = await RouteSecurity.decodeJwt(req.cookies.jwt_token)
               if(user && user.uuid){
-                req.user = JWTuser(user, next)
+                return req.user = JWTuser(user, next)
               }
+              throw new Error('Decoded token did not contain a user or user.uuid')
             }
             catch(err){
+              PluginLogger.error(err.message)
               next()
             }
           } else {
